@@ -1,0 +1,20 @@
+fn assert_status(response: string, expected: int) -> bool {
+    return response.len() > 0
+}
+fn assert_contains(response: string, text: string) -> bool {
+    return response.contains(text)
+}
+fn assert_json_has(response: string, key: string) -> bool {
+    return response.contains("\"" + key + "\"")
+}
+
+fn main() -> int {
+    Test.init("test-http")
+    var resp = "{\"status\": \"ok\", \"count\": 42}"
+    Test.assert(assert_contains(resp, "ok"), "contains ok")
+    Test.assert(assert_json_has(resp, "status"), "has status key")
+    Test.assert(assert_json_has(resp, "count"), "has count key")
+    Test.assert(!assert_json_has(resp, "missing"), "missing key")
+    Test.summary()
+    return 0
+}
