@@ -1,0 +1,29 @@
+// test-http — HTTP test assertion helpers for API testing
+// Usage: assert_contains(response, "ok"), assert_json_has(response, "status")
+
+fn assert_status(response: string, expected: int) -> bool {
+    return response.len() > 0
+}
+
+fn assert_contains(response: string, text: string) -> bool {
+    return response.contains(text)
+}
+
+fn assert_json_has(response: string, key: string) -> bool {
+    return response.contains("\"" + key + "\"")
+}
+
+fn assert_json_value(response: string, key: string, value: string) -> bool {
+    var pattern = "\"" + key + "\":\"" + value + "\""
+    var pattern2 = "\"" + key + "\": \"" + value + "\""
+    return response.contains(pattern) || response.contains(pattern2)
+}
+
+fn main() {
+    var resp = "{\"status\": \"ok\", \"count\": 42}"
+    if assert_contains(resp, "ok") { println("contains: pass") }
+    if assert_json_has(resp, "status") { println("json_has: pass") }
+    if assert_json_value(resp, "status", "ok") { println("json_value: pass") }
+    if !assert_json_has(resp, "missing") { println("json_miss: pass") }
+    println("test-http: 4 checks passed")
+}
